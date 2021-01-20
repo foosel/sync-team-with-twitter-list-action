@@ -1,0 +1,19 @@
+name: "Sync GitHub Stars to Twitter"
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: foosel/sync-team-with-twitter-list-action@main
+      with:
+        github-token: ${{ secrets.TEAM_MEMBER_TOKEN }}
+        twitter-consumer-key: ${{ secrets.TWITTER_CONSUMER_KEY }}
+        twitter-consumer-secret: ${{ secrets.TWITTER_CONSUMER_SECRET }}
+        twitter-access-key: ${{ secrets.TWITTER_ACCESS_KEY }}
+        twitter-access-secret: ${{ secrets.TWITTER_ACCESS_SECRET }}
+        github-team: ${{ secrets.ORGTEAM }}
+        twitter-list: "1326562334312189957"

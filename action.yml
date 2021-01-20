@@ -1,0 +1,25 @@
+name: 'Sync GitHub team with Twitter list'
+description: 'Syncs members of a GitHub team (who have listed their Twitter handle in their profile) to a Twitter list'
+author: 'foosel'
+inputs:
+  github-token:
+    description: 'A github token of a user belonging to the org with read:org permission'
+  twitter-consumer-key:
+    description: 'Twitter consumer key'
+  twitter-consumer-secret:
+    description: 'Twitter consumer secret'
+  twitter-access-key:
+    description: 'Twitter access token key'
+  twitter-access-secret:
+    description: 'Twitter access token secret'
+  github-team:
+    description: 'GitHub team designator in the format <organization>/<teamslug>'
+  twitter-list:
+    description: 'Twitter list ID with which to sync'
+  dry-run:
+    description: 'If set, no actual actions will be performed'
+    required: false
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

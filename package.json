@@ -1,0 +1,29 @@
+{
+  "name": "sync-team-with-twitter-list-action",
+  "version": "1.0.0",
+  "description": "A GitHub action that syncs GitHub team members with a Twitter list.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx ncc build src/index.js -m -o dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/foosel/sync-team-with-twitter-list-action.git"
+  },
+  "keywords": [],
+  "author": "Gina Häußge",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/foosel/sync-team-with-twitter-list-action/issues"
+  },
+  "homepage": "https://github.com/foosel/sync-team-with-twitter-list-action",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0",
+    "twitter": "^1.7.1"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.27.0"
+  }
+}
