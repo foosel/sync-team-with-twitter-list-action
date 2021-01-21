@@ -44,8 +44,8 @@ async function runLocally() {
     const twitterAccessKey = process.env.TWITTER_ACCESS_KEY;
     const twitterAccessSecret = process.env.TWITTER_ACCESS_SECRET;
     const dryRun = process.env.DRYRUN || false;
-    const orgteam = process.env.ORGTEAM;
-    const list = process.env.LIST;
+    const orgteam = process.env.GITHUB_TEAM;
+    const list = process.env.TWITTER_LIST;
 
     await synchronize(
       githubToken,
