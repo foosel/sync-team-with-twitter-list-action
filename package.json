@@ -1,6 +1,6 @@
 {
   "name": "sync-team-with-twitter-list-action",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A GitHub action that syncs GitHub team members with a Twitter list.",
   "main": "index.js",
   "scripts": {
@@ -19,11 +19,11 @@
   },
   "homepage": "https://github.com/foosel/sync-team-with-twitter-list-action",
   "dependencies": {
-    "@actions/core": "^1.2.6",
-    "@actions/github": "^4.0.0",
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0",
     "twitter": "^1.7.1"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.27.0"
+    "@vercel/ncc": "^0.33.3"
   }
 }

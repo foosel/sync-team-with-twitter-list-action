@@ -41,7 +41,7 @@ async function getListMembers(client, list) {
 
   let cursor = -1;
   do {
-    response = await client.get("lists/members", {
+    response = await client.get("/lists/members", {
       list_id: list,
       count: 100,
       cursor: cursor,
@@ -57,9 +57,30 @@ async function getListMembers(client, list) {
   return result;
 }
 
+async function validateMembers(client, members) {
+  let result = [];
+  for await (chunk of members.chunk(100)) {
+    const screen_name = chunk.join(",");
+    console.log(`Validating members ${screen_name}`);
+    try {
+      const response = await client.get("/users/lookup", {
+        screen_name: screen_name,
+      });
+      result = result.concat(response.map(entry => entry.screen_name));
+    } catch (error) {
+      if (error.length === 1 && error[0].code && error[0].code === 17) {
+        console.log(`None of ${screen_name} are valid Twitter users, skipping`);
+      } else {
+        throw error;
+      }
+    }
+  }
+  return result;
+}
+
 async function addListMembers(client, list, members, dryRun) {
   for await (chunk of members.chunk(100)) {
-    const screen_name = members.join(",");
+    const screen_name = chunk.join(",");
     console.log(`Adding members ${screen_name}`);
     if (!dryRun) {
       await client.post("/lists/members/create_all", {
@@ -72,7 +93,7 @@ async function addListMembers(client, list, members, dryRun) {
 
 async function removeListMembers(client, list, members, dryRun) {
   for await (chunk of members.chunk(100)) {
-    const screen_name = members.join(",");
+    const screen_name = chunk.join(",");
     console.log(`Removing members ${screen_name}`);
     if (!dryRun) {
       await client.post("/lists/members/destroy_all", {
@@ -88,12 +109,15 @@ async function syncListMembers(client, list, members, dryRun) {
   console.log("Twitter list members", currentMembers);
 
   const toAdd = members.filter((x) => !currentMembers.includes(x));
-  const toRemove = currentMembers.filter((x) => !members.includes(x));
-  console.log("Members to add", toAdd);
-  console.log("Members to remove", toRemove);
+  const toAddValid = await validateMembers(client, toAdd);
+  console.log("Members to add", toAddValid);
 
-  await addListMembers(client, list, toAdd, dryRun);
-  await removeListMembers(client, list, toRemove, dryRun);
+  const toRemove = currentMembers.filter((x) => !members.includes(x));
+  const toRemoveValid = await validateMembers(client, toRemove);
+  console.log("Members to remove", toRemoveValid);
+
+  await addListMembers(client, list, toAddValid, dryRun);
+  await removeListMembers(client, list, toRemoveValid, dryRun);
 }
 
 async function synchronize(
@@ -134,5 +158,6 @@ exports.getTeamMembers = getTeamMembers;
 exports.getListMembers = getListMembers;
 exports.addListMembers = addListMembers;
 exports.removeListMembers = removeListMembers;
+exports.lookupMembers = validateMembers;
 exports.syncListMembers = syncListMembers;
 exports.synchronize = synchronize;
